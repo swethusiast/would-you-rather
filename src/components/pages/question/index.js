@@ -1,64 +1,70 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { saveQuestionAnswer } from '../../../actions/question';
+import { handleSaveAnswer, handleGetQuestions } from '../../../actions/question';
+import { getUsers } from '../../../actions/auth';
 import Result from './result';
 import QuestionPoll from './questionPoll';
 import '../../../App.css';
 import { withRouter } from 'react-router-dom';
 
 class Home extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedOption: '',
-            answers: false,
-        };
-    }
+    state = {
+        selectedOption: '',
+        answers: false,
+    };
     handleOptionChange = (value) => {
         this.setState({
             selectedOption: value,
         });
     };
-    savaQustion = async () => {
-        await this.props.saveQuestionAnswer(this.props.user.id, this.props.qustion.id, this.state.selectedOption);
+    saveQuestion = () => {
+        const { handleSaveAnswer, handleGetQuestions, getUsers } = this.props;
+        handleSaveAnswer(this.props.user.id, this.props.question.id, this.state.selectedOption)
+            .then((resp) => {
+                handleGetQuestions();
+                getUsers();
+                this.props.history.push('/');
+            })
+            .catch((e) => {
+                alert('error while adding question answer options, try again.');
+            });
     };
     render() {
-        if (this.props.qustion == null) {
+        if (this.props.question == null) {
             return <div>error 404</div>;
         }
         if (this.props.Qstate) {
             return (
                 <Result
-                    qustion={this.props.qustion}
+                    question={this.props.question}
                     author={this.props.author}
-                    sulotion={this.props.user.answers[this.props.qustion.id]}
+                    solution={this.props.user.answers[this.props.question.id]}
                 />
             );
         }
         return (
             <QuestionPoll
-                qustion={this.props.qustion}
+                question={this.props.question}
                 author={this.props.author}
                 handleOptionChange={this.handleOptionChange}
                 selectedOption={this.state.selectedOption}
-                onSubmit={this.savaQustion}
+                onSubmit={this.saveQuestion}
             />
         );
     }
 }
 
-function mapStateToProps({ auth, qustions }, props) {
+function mapStateToProps({ auth, questions }, props) {
     const { id } = props.match.params;
     const { loginUser, users } = auth;
-    const { AllQustions } = qustions;
 
     return {
         users,
-        qustion: AllQustions[id],
-        author: AllQustions[id] == null ? null : users[AllQustions[id].author],
+        question: questions[id],
+        author: questions[id] == null ? null : users[questions[id].author],
         user: loginUser,
         Qstate: Object.keys(loginUser.answers).find((Qid) => Qid === id) !== undefined,
     };
 }
 
-export default withRouter(connect(mapStateToProps, { saveQuestionAnswer })(Home));
+export default withRouter(connect(mapStateToProps, { handleSaveAnswer, getUsers, handleGetQuestions })(Home));

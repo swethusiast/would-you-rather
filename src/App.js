@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Header from './components/common/Header';
 import { BrowserRouter, Route } from 'react-router-dom';
@@ -8,11 +8,11 @@ import NewQuestion from './components/pages/NewQuestion';
 import SignIn from './components/pages/SignIn';
 import questions from './components/pages/question';
 import { getUsers } from './actions/auth';
-import { getQuestions } from './actions/question';
-class App extends React.Component {
+import { handleGetQuestions } from './actions/question';
+class App extends Component {
     componentDidMount() {
         this.props.getUsers();
-        this.props.getQuestions();
+        this.props.handleGetQuestions();
     }
 
     render() {
@@ -43,4 +43,4 @@ function mapStateToProps({ auth }) {
     };
 }
 
-export default connect(mapStateToProps, { getUsers, getQuestions })(App);
+export default connect(mapStateToProps, { getUsers, handleGetQuestions })(App);

@@ -21,7 +21,7 @@ class signIn extends Component {
                 <div className="row justify-content-center">
                     <div className="col-md-6">
                         <div className="card">
-                            <div className="card-header">
+                            <div className="card-header text-center">
                                 <h5>Welcome To would you rather App</h5>
                             </div>
                             <div className="text-center">
@@ -35,7 +35,7 @@ class signIn extends Component {
                                     onChange={(e) => this.setState({ user: e.target.value })}
                                 >
                                     <option value={''} disabled>
-                                        chose user
+                                        choose user
                                     </option>
                                     {Object.keys(this.props.users).map((key, user) => (
                                         <option key={key} value={key}>

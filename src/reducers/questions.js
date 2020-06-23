@@ -1,34 +1,13 @@
-import {
-    GET_QUESTIONS,
-    SAVE_QUESTION,
-    SAVE_QUESTION_ANSWER,
-    SAVE_QUESTION_ANSWER_FAIL,
-    SAVE_QUESTION_ANSWER_SUCCESS,
-    SAVE_QUESTION_FAIL,
-    SAVE_QUESTION_SUCCESS,
-} from '../actions/question';
-const initial_state = {
-    allQuestions: {},
-    questionAnswerState: '',
-};
+import { GET_QUESTIONS, SAVE_QUESTION, SAVE_ANSWER } from '../actions/question';
 
-export default function questions(state = initial_state, action) {
+export default function questions(state = {}, action) {
     switch (action.type) {
         case GET_QUESTIONS:
-            return { ...state, allQuestions: action.payload };
+            return { ...state, ...action.questions };
         case SAVE_QUESTION:
-            return { ...state, questionState: 'loading' };
-        case SAVE_QUESTION_SUCCESS:
-            return { ...state, questionState: 'success' };
-        case SAVE_QUESTION_FAIL:
-            return { ...state, questionState: 'fail' };
-
-        case SAVE_QUESTION_ANSWER:
-            return { ...state, questionAnswerState: 'loading' };
-        case SAVE_QUESTION_ANSWER_SUCCESS:
-            return { ...state, questionAnswerState: 'success' };
-        case SAVE_QUESTION_ANSWER_FAIL:
-            return { ...state, questionAnswerState: 'fail' };
+            return { ...state, [action.question.id]: { ...action.question } };
+        case SAVE_ANSWER:
+            return { ...state };
         default:
             return state;
     }
