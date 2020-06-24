@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Header from './components/common/Header';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Home from './components/pages/Home';
 import LeaderBoard from './components/pages/LeaderBoard';
 import NewQuestion from './components/pages/NewQuestion';
@@ -24,12 +24,12 @@ class App extends Component {
                     {this.props.login === true ? (
                         <Route path="/" component={SignIn} />
                     ) : (
-                        <div className="body">
+                        <Switch>
                             <Route path="/" exact component={Home} />
                             <Route path="/add" component={NewQuestion} />
                             <Route path="/leaderboard" component={LeaderBoard} />
                             <Route path="/questions/:id" component={questions} />
-                        </div>
+                        </Switch>
                     )}
                 </Fragment>
             </BrowserRouter>

@@ -29,7 +29,6 @@ export const handleGetQuestions = () => (dispatch) => {
 export const handleSaveQuestion = (author, optionOneText, optionTwoText) => async (dispatch) => {
     return _saveQuestion({ optionOneText, optionTwoText, author })
         .then((resp) => {
-            console.log(resp);
             dispatch(saveQuestion(resp));
             dispatch(getQuestions());
         })

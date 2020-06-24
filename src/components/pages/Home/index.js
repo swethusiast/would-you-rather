@@ -19,7 +19,6 @@ class Home extends React.Component {
     render() {
         const { answered, unanswered } = this.props;
         const questions = this.state.answered ? answered : unanswered;
-
         return (
             <div className="container">
                 <div className="row my-5 justify-content-center">
@@ -55,22 +54,29 @@ class Home extends React.Component {
 }
 
 function getAnswered(o1, o2) {
-    return Object.keys(o1).filter((k) => k in o2).reduce((obj, key) => {
-        obj[key] = o1[key];
-        return obj;
-    }, {});
+    return Object.keys(o1)
+        .sort((a, b) => o1[b].timestamp - o1[a].timestamp)
+        .filter((k) => k in o2)
+        .reduce((obj, key) => {
+            obj[key] = o1[key];
+            return obj;
+        }, {});
 }
 function getNotAnswered(o1, o2) {
-    return Object.keys(o1).filter((k) => !(k in o2)).reduce((obj, key) => {
-        obj[key] = o1[key];
-        return obj;
-    }, {});
+    return Object.keys(o1)
+        .sort((a, b) => o1[b].timestamp - o1[a].timestamp)
+        .filter((k) => !(k in o2))
+        .reduce((obj, key) => {
+            obj[key] = o1[key];
+            return obj;
+        }, {});
 }
 
 function mapStateToProps({ questions, auth }) {
     const { loginUser, users } = auth;
     const answered = getAnswered(questions, loginUser.answers);
     const unanswered = getNotAnswered(questions, loginUser.answers);
+
     return {
         users,
         answered,
